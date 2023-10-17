@@ -6,6 +6,9 @@
   "scripts": {
     "start": "nodemon --exec babel-node server.js"
   },
+  "engines":{
+    "node":">=14.17.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
