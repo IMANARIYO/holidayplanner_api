@@ -1,14 +1,20 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 const tourSchema = mongoose.Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "userSchema", // Assuming you have a userSchema model/schema
+    required: true
+  },
+  userEmail: {
+    type: String,
+    required: true
+  },
   destination: {
     type: String,
     required: true
   },
-  backdropImage: {
-    type: String,
-   
-  },
+
   title: {
     type: String,
     required: true
@@ -61,6 +67,8 @@ const tourSchema = mongoose.Schema({
     type: Date,
     required: true
   },
+image:{type:String,required:true},
+
   gallery: [
     {
       type: String
@@ -78,5 +86,5 @@ const tourSchema = mongoose.Schema({
   ]
 });
 
- export const tourconst = mongoose.model("tours", tourSchema);
+export const tourconst = mongoose.model("tours", tourSchema);
 

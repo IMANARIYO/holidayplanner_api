@@ -1,16 +1,21 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 const bookingSchema = mongoose.Schema({
-  tourID: {
-    type: Schema.Types.ObjectId, // This refers to an ObjectId in MongoDB
-    ref: "TOUR", // This is a reference to another model (the Tour model)
-    required: true
-  },
-  userID: {
+  userId: {
     type: Schema.Types.ObjectId, // Similarly, this refers to an ObjectId
-    ref: "USER", // This is a reference to the User model
+    ref: "userSchema", // This is a reference to the User model
     required: true
   },
+  userEmail: {
+    type: String,
+    required: true
+  },
+  tourId: {
+    type: Schema.Types.ObjectId, // This refers to an ObjectId in MongoDB
+    ref: "tourSchema", // This is a reference to another model (the Tour model)
+    required: true
+  },
+
   isPayed: {
     type: Boolean,
     default: false
@@ -21,4 +26,5 @@ const bookingSchema = mongoose.Schema({
     required: true
   }
 });
+export const bookingconst = mongoose.model("bookings", bookingSchema);
 

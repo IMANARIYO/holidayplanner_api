@@ -1,6 +1,13 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 const testmontSchema = mongoose.Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "userSchema", // Assuming you have a userSchema model/schema
+    required: true
+  },
+  userEmail: { type: String, required: true },
+
   rating: {
     type: Number,
     required: true,
@@ -9,11 +16,6 @@ const testmontSchema = mongoose.Schema({
   },
   body: {
     type: String,
-    required: true
-  },
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: "USER", // Assuming you have a User model/schema
     required: true
   }
 });
