@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 import mainRouter from "./src/routes/index.js";
 
 const app = express();
-app.use(cors({origin:"*"}));
+app.get(cors());
 app.use(bodyParser.json());
 app.use("/",mainRouter);
 
