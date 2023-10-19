@@ -1,16 +1,11 @@
-import cloudinary from "cloudinary";
 import dotenv from "dotenv";
+import cloudinary from "cloudinary";
 dotenv.config();
 cloudinary.v2.config({
-    // cloud_name:process.env.cloud_name,
-    // api_key:process.env.api_key,
-    // api_secret:process.env.api_secret
-   cloud_name: 'dorjr1njc',
-   api_key: 992729645554668,
-    api_secret: "nEJMnOTcemTaYlGAvHGzuCvggqI"
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
 });
-
-
 const uploadClaudinary=async (file)=>{
     try {
         const result = await cloudinary.v2.uploader.upload(file.path,

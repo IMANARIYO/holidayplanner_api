@@ -22,10 +22,10 @@ const storage = multer.diskStorage({
 })
 const upload = multer({dest:"imagescontainer/" ,storage: storage });
 const tourRouter=express.Router();
-//tourRouter.use(verifyingtoken);
+tourRouter.use(verifyingtoken);
 tourRouter.post("/", upload.single("image"), insertTour);
 tourRouter.get("/", getalltours);
-tourRouter.get("/findone/:userId", verifyingtoken, findTourByUserId);
+tourRouter.get("/findone/:userId",findTourByUserId);
 tourRouter.get("/findmany/:userId", findToursByUserId);
 tourRouter.delete("/delete/:id",deleteTour);
 tourRouter.delete("/deletemany/:userId", deleteToursByUserId);
