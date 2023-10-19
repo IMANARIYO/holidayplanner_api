@@ -1,4 +1,5 @@
-import { insertTour,getalltours,deleteTour,updateone } from "../controllers/trip/index.js";
+
+import { insertTour,getalltours,deleteTour,updateTour,findTourByUserId,findToursByUserId,deleteToursByUserId,updateManyTours} from "../controllers/trip/index.js";
 import { verifyingtoken } from "../middleware/verifytoken.js";
 import multer from "multer";
 import fs from "fs";
@@ -22,6 +23,11 @@ const tourRouter=express.Router();
 tourRouter.use(verifyingtoken);
 tourRouter.post("/", upload.single("image"), insertTour);
 tourRouter.get("/", getalltours);
+tourRouter.get("/findone/:userId",findTourByUserId);
+tourRouter.get("/findmany/:userId", findToursByUserId);
 tourRouter.delete("/delete/:id",deleteTour);
-tourRouter.patch("/:id",updateone);
+tourRouter.delete("/deletemany/:userId", deleteToursByUserId);
+tourRouter.patch("/update/:id", upload.single("image"), updateTour);
+tourRouter.patch("/updatemany/:userId", upload.single("image"), updateManyTours);
+
 export default tourRouter;

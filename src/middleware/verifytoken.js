@@ -19,9 +19,6 @@ if(!token){
             message:err.message,
         });
     }
-    let email= req.body.email;
-    let user=userconst.findOne({email:req.body.email})
-    console.log("req.body.email",req.body.email)
     req.userId=decoded._id;
     req.userEmail=decoded.email
     next();

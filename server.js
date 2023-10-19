@@ -1,14 +1,16 @@
 import dotenv from "dotenv";
 dotenv.config();
+import cors from"cors";
 import express  from "express";
 import bodyParser from"body-parser";
 import mongoose from "mongoose";
 import mainRouter from "./src/routes/index.js";
 
 const app = express();
-
+app.use(cors({origin:"*"}));
 app.use(bodyParser.json());
-app.use("/",mainRouter)
+app.use("/",mainRouter);
+
 const PORT = 8800;
 
 mongoose.connect(process.env.DB_CONNECTION_DEV, {

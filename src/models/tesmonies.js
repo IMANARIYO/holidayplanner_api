@@ -3,7 +3,6 @@ const { Schema } = mongoose;
 const testmontSchema = mongoose.Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "userSchema", // Assuming you have a userSchema model/schema
     required: true
   },
   userEmail: { type: String, required: true },
@@ -19,4 +18,4 @@ const testmontSchema = mongoose.Schema({
     required: true
   }
 });
-export const testmonyconst = mongoose.model("TESTIMONIES", testmontSchema);
+export const testmonyconst = mongoose.model("testimonies", testmontSchema);

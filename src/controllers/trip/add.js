@@ -74,10 +74,6 @@ import { tourconst, contactconst, testmonyconst,bookingconst } from "../../model
           if (req.file && req.file.path) {
             req.body.image = req.file.path; // For models that have an image
           }
-if(req.tourId){
-  const{tourId}=req;
-  req.body.tourId = tourId;
-}
           const data = await model.create(req.body);
 
           res
@@ -86,6 +82,10 @@ if(req.tourId){
               message: `${model.modelName} added successfully.`,
               data: data
             });
+            if (!req.body.discount) {
+              req.tourId = null;
+            }
+           req.tourId = data._id;
         } catch (err) {
           console.log(`Error adding ${model.modelName}`, err);
           res

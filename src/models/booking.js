@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 const bookingSchema = mongoose.Schema({
   userId: {
-    type: Schema.Types.ObjectId, // Similarly, this refers to an ObjectId
-    ref: "userSchema", // This is a reference to the User model
+    type: Schema.Types.ObjectId, 
+    ref: "userSchema", 
     required: true
   },
   userEmail: {
@@ -11,8 +11,8 @@ const bookingSchema = mongoose.Schema({
     required: true
   },
   tourId: {
-    type: Schema.Types.ObjectId, // This refers to an ObjectId in MongoDB
-    ref: "tourSchema", // This is a reference to another model (the Tour model)
+    type: Schema.Types.ObjectId, 
+    ref: "tourSchema",
     required: true
   },
 
@@ -22,7 +22,7 @@ const bookingSchema = mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ["credit_card", "paypal", "bank_transfer"], // Example payment methods, you can adjust this array
+    enum: ["credit_card", "paypal", "bank_transfer"], 
     required: true
   }
 });

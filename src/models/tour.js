@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 const tourSchema = mongoose.Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "userSchema", // Assuming you have a userSchema model/schema
+   ref: "userSchema", // Assuming you have a userSchema model/schema
     required: true
   },
   userEmail: {

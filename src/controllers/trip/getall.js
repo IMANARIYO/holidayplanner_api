@@ -10,9 +10,7 @@
 //      console.log(error.message)   
 //     }  
 // }
-
-import { tourconst, contactconst, userconst,bookingconst,testmonyconst } from "../../models";
-
+import { tourconst, contactconst, testmonyconst,bookingconst,userconst } from "../../models"; 
 const getAllFromModel = model => {
   return async (req, res) => {
     try {
