@@ -1,6 +1,8 @@
 
 import { insertTour,getalltours,deleteTour,updateTour,findTourByUserId,findToursByUserId,deleteToursByUserId,updateManyTours} from "../controllers/trip/index.js";
 import { verifyingtoken } from "../middleware/verifytoken.js";
+import dotenv from "dotenv";
+dotenv.config();
 import multer from "multer";
 import fs from "fs";
 import express from "express";

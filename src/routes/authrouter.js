@@ -6,9 +6,9 @@ import { verifyingtoken } from "../middleware/index.js";
 const authRouter=express.Router();
 authRouter.post("/signup", signup);
 authRouter.post("/login", login);
-authRouter.use(verifyingtoken)
+//authRouter.use(verifyingtoken)
 authRouter.get("/", getAllUsers);
-authRouter.post("/changepassword", changepassword);
-authRouter.post("/isadmin",isAdmin)
-authRouter.post("/contact",insertContact)
+authRouter.post("/changepassword",verifyingtoken, changepassword);
+authRouter.post("/isadmin", verifyingtoken,isAdmin);
+authRouter.post("/contact",isAdmin,insertContact)
 export default authRouter;
