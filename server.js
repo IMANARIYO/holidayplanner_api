@@ -13,7 +13,8 @@ app.use("/",mainRouter);
 
 const PORT = 8800;
 
-mongoose.connect(process.env.DB_CONNECTION_DEV, {
+mongoose
+  .connect(process.env.DB_CONNECTION_LIVE, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })

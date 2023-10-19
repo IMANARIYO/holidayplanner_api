@@ -1,5 +1,6 @@
 
 import { tourconst, contactconst, testmonyconst,bookingconst } from "../../models"; 
+import uploadClaudinary from "../../utils/claudinary";
 
 // export const insertone = async (req, res) => {
 //   try {
@@ -67,10 +68,14 @@ import { tourconst, contactconst, testmonyconst,bookingconst } from "../../model
    const insertOneDynamic = model => {
       return async (req, res) => {
         try {
+        
           const { userEmail, userId } = req;
           req.body.userEmail = userEmail;
           req.body.userId = userId;
-
+if(req.file){
+  const image=await uploadClaudinary(req.file);
+  console.log(image)
+}
           if (req.file && req.file.path) {
             req.body.image = req.file.path; // For models that have an image
           }
