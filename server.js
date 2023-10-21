@@ -14,7 +14,7 @@ const swaggerDocument = yaml.load("./yamlfile.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
-app.get(cors());
+app.use(cors());
 app.use(bodyParser.json());
 app.use("/", mainRouter);
 
