@@ -12,8 +12,7 @@ if(!isadmin){
     console.log(user.role)
   return  res.status(401).json({message:"action is only reseverd for admins"})
 }
-console.log("in is admin debugging", userId);
-res.status(200).json({ message: "this is admin" });
+
 next()
 
 }

@@ -1,0 +1,764 @@
+openapi: "3.0.0"
+info:
+  title: User API
+  version: "1.0.0"
+  description: API documentation for holiday planning
+servers:
+  - url: "http://localhost:8800"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      required:
+        - fullNames
+        - email
+        - password
+      properties:
+        fullNames:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phoneNumber:
+          type: number
+        location:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+          default: user
+      example:
+        fullNames: John Doe
+        email: johndoe@example.com
+        password: secret123
+        phoneNumber: 1234567890
+        location: New York
+        role: user
+    UserSignupRequest:
+      type: object
+      required:
+        - fullNames
+        - email
+        - password
+      properties:
+        fullNames:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phoneNumber:
+          type: number
+        location:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+          default: user
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: imanariyobaptiste2@gmail.com
+        password:
+          type: string
+          example: password2
+    LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        access_token:
+          type: string
+        user:
+          type: object
+          properties:
+            email:
+              type: string
+            location:
+              type: string
+            fullname:
+              type: string
+            phone:
+              type: number
+            password:
+              type: string
+            role:
+              type: string
+    ChangePasswordRequest:
+      type: object
+      required:
+        - currentpassword
+        - newpassword
+      properties:
+        currentpassword:
+          type: string
+          example: password2
+        newpassword:
+          type: string
+          example: password2
+    Tour:
+      type: object
+      required:
+        - destination
+        - title
+        - description
+        - duration
+        - groupSize
+        - price
+        - tourType
+        - departure
+        - seats
+        - fromMonth
+        - toMonth
+        - departureTime
+        - returnTime
+        - image
+      properties:
+        userId:
+          type: string
+          description: User ID extracted from the token. Not provided in the form.
+        userEmail:
+          type: string
+          description: User email extracted from the token. Not provided in the form.
+        destination:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        duration:
+          type: number
+        groupSize:
+          type: number
+        price:
+          type: number
+        discount:
+          type: number
+          default: 0
+        tourType:
+          type: string
+        departure:
+          type: string
+        seats:
+          type: number
+        fromMonth:
+          type: string
+        toMonth:
+          type: string
+        departureTime:
+          type: string
+          format: date-time
+        returnTime:
+          type: string
+          format: date-time
+        image:
+          type: string
+          format: binary
+        gallery:
+          type: array
+          items:
+            type: string
+        priceIncluded:
+          type: array
+          items:
+            type: string
+        priceNotIncluded:
+          type: array
+          items:
+            type: string   
+paths:
+  /auth/signup:
+    post:
+      summary: Register a new user
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignupRequest'
+      responses:
+        '200':
+          description: Successfully registered
+        '409':
+          description: Email already exists
+
+  /auth/login:
+    post:
+      summary: Authenticate user and get an access token. Copy it and paste it in the top right corner in the authorize button as you will need it for other actions based on your access token.
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        401:
+          description: Wrong password
+        404:
+          description: User not found
+
+  /auth/changepassword:
+    post:
+      summary: Change the password of a user. You will need to login first, copy the access token provided, and paste it in the top right corner in the authorize button.
+      tags: [Authentication]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        200:
+          description: Password changed successfully
+        401:
+          description: Current password is wrong
+        404:
+          description: User not found
+        500:
+          description: Server error
+
+  /auth/deleteuser/{id}:
+    delete:
+      summary: Delete a user by ID
+      tags: [Authentication]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: User ID to be deleted
+      responses:
+        200:
+          description: User deleted successfully
+        404:
+          description: No user found with the given ID
+        500:
+          description: Server error
+
+  /auth:
+    get:
+      summary: Retrieve a list of all users
+      tags: [Authentication]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Successfully retrieved list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        401:
+          description: Unauthorized request
+        500:
+          description: Server error
+
+  /tour:
+    get:
+      summary: Retrieve a list of all tours
+      tags: [Tours]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Successfully retrieved list of tours
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tour'
+        401:
+          description: Unauthorized request
+        500:
+          description: Server error
+  
+    post:
+      summary: Insert a new tour
+      tags: [Tours]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                destination:
+                  type: string
+                  description: Destination of the tour
+                title:
+                  type: string
+                description:
+                  type: string
+                duration:
+                  type: number
+                groupSize:
+                  type: number
+                price:
+                  type: number
+                discount:
+                  type: number
+                tourType:
+                  type: string
+                departure:
+                  type: string
+                seats:
+                  type: number
+                fromMonth:
+                  type: string
+                toMonth:
+                  type: string
+                departureTime:
+                  type: string
+                  format: date-time
+                returnTime:
+                  type: string
+                  format: date-time
+                image:
+                  type: string
+                  format: binary
+                  description: Image file for the tour
+                gallery:
+                  type: array
+                  items:
+                    type: string
+                priceIncluded:
+                  type: array
+                  items:
+                    type: string
+                priceNotIncluded:
+                  type: array
+                  items:
+                    type: string
+              required:
+                 - destination
+                 - title
+                 - description
+                 - duration
+                 - groupSize
+                 - price
+                 - tourType
+                 - departure
+                 - seats
+                 - fromMonth
+                 - toMonth
+                 - departureTime
+                 - returnTime
+                 - image 
+                 - gallery
+                 - priceIncluded
+                 - priceNotIncluded
+                 - discount    
+      responses:
+        200:
+          description: Tour inserted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tour'
+        400:
+          description: Bad request, possibly due to missing fields or incorrect data format
+        401:
+          description: Unauthorized request
+        500:
+          description: Server error
+
+  /tour/findone/{userId}:
+    get:
+      summary: Find a single tour by User ID
+      tags: [Tours]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which tour is to be retrieved
+      responses:
+        200:
+          description: Successfully retrieved the tour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tour'
+        404:
+          description: No tour found for the given user ID
+        500:
+          description: Server error
+
+  /tour/findmany/{userId}:
+    get:
+      summary: Find all tours associated with a User ID
+      tags: [Tours]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which tours are to be retrieved
+      responses:
+        200:
+          description: Successfully retrieved the tours
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tour'
+        404:
+          description: No tours found for the given user ID
+        500:
+          description: Server error
+
+  /tour/delete/{id}:
+    delete:
+      summary: Delete a tour by its ID
+      tags: [Tours]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the tour to be deleted
+      responses:
+        200:
+          description: Tour deleted successfully
+        404:
+          description: No tour found with the given ID
+        500:
+          description: Server error
+
+  /tour/deletemany/{userId}:
+    delete:
+      summary: Delete all tours associated with a User ID
+      tags: [Tours]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which all tours are to be deleted
+      responses:
+        200:
+          description: Tours deleted successfully
+        404:
+          description: No tours found for the given user ID
+        500:
+          description: Server error
+  /tour/update/{id}:
+    patch:
+      summary: Update a specific tour by its ID
+      tags: [Tours]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the tour to be updated
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: ID of the user associated with the tour
+                userEmail:
+                  type: string
+                  description: Email of the user
+                destination:
+                  type: string
+                  description: Destination of the tour
+                title:
+                  type: string
+                  description: Title of the tour
+                description:
+                  type: string
+                  description: Detailed description of the tour
+                duration:
+                  type: number
+                  description: Duration of the tour in days
+                groupSize:
+                  type: number
+                  description: Size of the group for the tour
+                price:
+                  type: number
+                  description: Price of the tour
+                discount:
+                  type: number
+                  description: Available discount for the tour
+                tourType:
+                  type: string
+                  description: Type of the tour (e.g., adventure, relaxation)
+                departure:
+                  type: string
+                  description: Departure location of the tour
+                seats:
+                  type: number
+                  description: Number of available seats for the tour
+                fromMonth:
+                  type: string
+                  description: Starting month of the tour
+                toMonth:
+                  type: string
+                  description: Ending month of the tour
+                departureTime:
+                  type: string
+                  format: date-time
+                  description: Departure time of the tour
+                returnTime:
+                  type: string
+                  format: date-time
+                  description: Return time of the tour
+                image:
+                  type: string
+                  format: binary
+                  description: Image file for the tour
+                gallery:
+                  type: array
+                  items:
+                    type: string
+                  description: Additional gallery images (URLs or file paths)
+                priceIncluded:
+                  type: array
+                  items:
+                    type: string
+                  description: List of items included in the price
+                priceNotIncluded:
+                  type: array
+                  items:
+                    type: string
+                  description: List of items not included in the price
+              required:
+                 - destination
+                 - title
+                 - description
+                 - duration
+                 - groupSize
+                 - price
+                 - tourType
+                 - departure
+                 - seats
+                 - fromMonth
+                 - toMonth
+                 - departureTime
+                 - returnTime
+                 - image 
+                 - gallery
+                 - priceIncluded
+                 - priceNotIncluded
+                 - discount    
+      responses:
+        200:
+          description: Tour updated successfully
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized request
+        404:
+          description: No tour found with the given ID
+        500:
+          description: Server error
+  /tour/updatemany/{userId}:
+    patch:
+      summary: Update multiple tours associated with a specific User ID
+      tags: [Tours]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ID of the user whose tours are to be updated
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: ID of the user associated with the tours
+                userEmail:
+                  type: string
+                  description: Email of the user
+                destination:
+                  type: string
+                  description: Destination of the tours
+                title:
+                  type: string
+                  description: Title of the tours
+                description:
+                  type: string
+                  description: Detailed description of the tours
+                duration:
+                  type: number
+                  description: Duration of the tours in days
+                groupSize:
+                  type: number
+                  description: Size of the group for the tours
+                price:
+                  type: number
+                  description: Price of the tours
+                discount:
+                  type: number
+                  description: Available discount for the tours
+                tourType:
+                  type: string
+                  description: Type of the tours (e.g., adventure, relaxation)
+                departure:
+                  type: string
+                  description: Departure location of the tours
+                seats:
+                  type: number
+                  description: Number of available seats for the tours
+                fromMonth:
+                  type: string
+                  description: Starting month of the tours
+                toMonth:
+                  type: string
+                  description: Ending month of the tours
+                departureTime:
+                  type: string
+                  format: date-time
+                  description: Departure time of the tours
+                returnTime:
+                  type: string
+                  format: date-time
+                  description: Return time of the tours
+                image:
+                  type: string
+                  format: binary
+                  description: Image file for the tours
+                gallery:
+                  type: array
+                  items:
+                    type: string
+                  description: Additional gallery images (URLs or file paths)
+                priceIncluded:
+                  type: array
+                  items:
+                    type: string
+                  description: List of items included in the price
+                priceNotIncluded:
+                  type: array
+                  items:
+                    type: string
+                  description: List of items not included in the price
+              required:
+                 - destination
+                 - title
+                 - description
+                 - duration
+                 - groupSize
+                 - price
+                 - tourType
+                 - departure
+                 - seats
+                 - fromMonth
+                 - toMonth
+                 - departureTime
+                 - returnTime
+                 - image 
+                 - gallery
+                 - priceIncluded
+                 - priceNotIncluded
+                 - discount    
+      responses:
+        200:
+          description: Tours updated successfully for the given User ID
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized request
+        404:
+          description: No tours found for the given User ID
+        500:
+          description: Server error
+  /tour/search:
+    post:
+      summary: Search for specific tours based on user criteria
+      tags: [Tours]
+      description: This endpoint allows users to search for tours based on a specific field and value.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field:
+                  type: string
+                  description: The field in the tour model to search by. For example, "destination".
+                  example: "destination"
+                value:
+                  type: string
+                  description: The value to search for in the specified field.
+                  example: "kigali"
+      responses:
+        200:
+          description: Successfully retrieved search results.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Search results"
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tour'
+        400:
+          description: Bad request, possibly due to missing fields or incorrect data format.
+        500:
+          description: Server error while searching for tours.
+  

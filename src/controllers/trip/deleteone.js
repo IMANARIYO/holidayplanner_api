@@ -1,4 +1,4 @@
-import { tourconst, contactconst, testmonyconst,bookingconst } from "../../models"; 
+import { tourconst, contactconst, testmonyconst,bookingconst,userconst } from "../../models"; 
 // export const deleteonef=async  (req,res)=>{
 //     let id=req.params.id
 // try {
@@ -55,7 +55,7 @@ const deleteOneDynamic = model => {
     }
   };
 };
-
+export const deleteUser = deleteOneDynamic(userconst);
 export const deleteTour = deleteOneDynamic(tourconst);
 export const deleteContact = deleteOneDynamic(contactconst);
 export const deleteTestimony = deleteOneDynamic(testmonyconst);
