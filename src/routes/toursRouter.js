@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({dest:"imagescontainer/" ,storage: storage });
 const tourRouter=express.Router();
-tourRouter.use(verifyingtoken);
+//tourRouter.use(verifyingtoken);
 tourRouter.get("/", getalltours);
 tourRouter.post("/search",searchTours);
 tourRouter.post("/", upload.single("image"), insertTour);
