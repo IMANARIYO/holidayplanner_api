@@ -2,7 +2,12 @@ openapi: "3.0.0"
 info:
   title: User API
   version: "1.0.0"
-  description: API documentation for holiday planning
+  description: API documentation for holiday planning 
+  contact:
+    name: imanariyo baptiste
+    email: "imanariyobaptiste@gmail.com"
+    url: "tel:0787795163"
+  description: "Phone: 0787795163"
 servers:
   - url: " https://holidayplanner.onrender.com"
 components:
@@ -34,12 +39,12 @@ components:
           enum: [user, admin]
           default: user
       example:
-        fullNames: John Doe
-        email: johndoe@example.com
-        password: secret123
+        fullNames: imanariyo baptiste
+        email: imanariyobaptiste@gmail.com
+        password: password
         phoneNumber: 1234567890
-        location: New York
-        role: user
+        location: kigali Rwanda
+        role: admin
     UserSignupRequest:
       type: object
       required:
@@ -49,14 +54,19 @@ components:
       properties:
         fullNames:
           type: string
+          example: imanariyo baptiste
         email:
           type: string
+          example: imanariyobaptiste2@gmail.com
         password:
           type: string
+          example: password2
         phoneNumber:
           type: number
+          example: 787795163
         location:
           type: string
+          example: kigali
         role:
           type: string
           enum: [user, admin]
@@ -313,29 +323,41 @@ paths:
               properties:
                 destination:
                   type: string
+                  example: kigali
                   description: Destination of the tour
                 title:
                   type: string
+                  example: seeing the beauty of rwanda
                 description:
                   type: string
+                  example: observing  natural forests thousand hill and so on
                 duration:
                   type: number
+                  example: 4
                 groupSize:
                   type: number
+                  example: 5
                 price:
                   type: number
+                  example: 6
                 discount:
                   type: number
+                  example: 7
                 tourType:
                   type: string
+                  example: summer
                 departure:
                   type: string
+                  example: kampla
                 seats:
                   type: number
+                  example: 20
                 fromMonth:
                   type: string
+                  example: month1
                 toMonth:
                   type: string
+                  example: month2
                 departureTime:
                   type: string
                   format: date-time
@@ -415,7 +437,6 @@ paths:
           description: No tour found for the given user ID
         500:
           description: Server error
-
   /tour/findmany/{userId}:
     get:
       summary: Find all tours associated with a User ID
@@ -442,6 +463,33 @@ paths:
           description: No tours found for the given user ID
         500:
           description: Server error
+  /tour/findbyid/{id}:
+    get:
+      summary: find a given tour using it id
+      tags: [Tours]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id of  tour you want to find
+      responses:
+        200:
+          description: Successfully retrieved the tour
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tour'
+        404:
+          description: No tours found for the given  id
+        500:
+          description: Server error
+
 
   /tour/delete/{id}:
     delete:
@@ -726,6 +774,8 @@ paths:
     post:
       summary: Search for specific tours based on user criteria
       tags: [Tours]
+      security:
+        - bearerAuth: []
       description: This endpoint allows users to search for tours based on a specific field and value.
       requestBody:
         required: true

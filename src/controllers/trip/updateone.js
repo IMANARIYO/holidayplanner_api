@@ -1,4 +1,4 @@
-import { tourconst, contactconst, userconst,bookingconst,testmonyconst } from "../../models";
+import { tourconst, contactconst, userconst,bookingconst,testmonyconst } from "../../models"
 // export const updateone=async (req,res)=>{
 // const{id}=req.params;
 // const update=req.body;

@@ -8,6 +8,7 @@ authRouter.post("/signup", signup);
 authRouter.post("/login", login);
 authRouter.use(verifyingtoken)
 authRouter.get("/", getAllUsers);
+
 authRouter.post("/changepassword",verifyingtoken, changepassword);
 //authRouter.post("/isadmin", verifyingtoken,isAdmin);
 authRouter.delete("/deleteuser/:id",isAdmin,deleteUser);
