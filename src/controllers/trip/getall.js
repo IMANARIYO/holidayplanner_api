@@ -1,15 +1,4 @@
 
-// export const getalltours=async (req,res)=>{
-//     try {
-//         let data=await tourconst.find();
-//         if(!data){
-//             return res.status(404).json({message:"no data found"})
-//         }
-//         res.status(200).json({data})
-//     } catch (error) {
-//      console.log(error.message)   
-//     }  
-// }
 import { tourconst, contactconst, testmonyconst,bookingconst,userconst } from "../../models"; 
 const getAllFromModel = model => {
   return async (req, res) => {

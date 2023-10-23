@@ -7,8 +7,7 @@ export const searchTours = async (req, res) => {
         let value = req.body.value;
         console.log(field, value);
 
-        const results = await tourconst.find({[field]: value}); // Using computed property name syntax
-
+        const results = await tourconst.find({[field]: value});
         res.status(200).json({ message: "Search results", data: results });
     } catch (err) {
         console.log("Error searching tours", err);

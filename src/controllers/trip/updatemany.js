@@ -1,7 +1,7 @@
 import { tourconst, contactconst, testmonyconst,bookingconst,userconst } from "../../models";
 const updateManyByUserId = model => {
   return async (req, res) => {
-    const { userId } = req.params; // Assumes you're updating by userId
+    const { userId } = req.params; 
     const update = req.body;
 
     try {
