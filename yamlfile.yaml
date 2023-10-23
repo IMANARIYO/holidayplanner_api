@@ -9,7 +9,7 @@ info:
     url: "tel:0787795163"
   description: "Phone: 0787795163"
 servers:
-  - url: " https://holidayplanner.onrender.com"
+  - url: "http://localhost:8800"
 components:
   securitySchemes:
     bearerAuth:
@@ -135,12 +135,6 @@ components:
         - returnTime
         - image
       properties:
-        userId:
-          type: string
-          description: User ID extracted from the token. Not provided in the form.
-        userEmail:
-          type: string
-          description: User email extracted from the token. Not provided in the form.
         destination:
           type: string
         title:
@@ -177,8 +171,10 @@ components:
           format: binary
         gallery:
           type: array
+          format: binary
           items:
-            type: string
+          type: string
+          format: binary
         priceIncluded:
           type: array
           items:
@@ -372,6 +368,7 @@ paths:
                   type: array
                   items:
                     type: string
+                    format: binary
                 priceIncluded:
                   type: array
                   items:
@@ -552,12 +549,6 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: string
-                  description: ID of the user associated with the tour
-                userEmail:
-                  type: string
-                  description: Email of the user
                 destination:
                   type: string
                   description: Destination of the tour
@@ -610,6 +601,7 @@ paths:
                   type: array
                   items:
                     type: string
+                    format: binary
                   description: Additional gallery images (URLs or file paths)
                 priceIncluded:
                   type: array
@@ -671,12 +663,6 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: string
-                  description: ID of the user associated with the tours
-                userEmail:
-                  type: string
-                  description: Email of the user
                 destination:
                   type: string
                   description: Destination of the tours
@@ -729,6 +715,7 @@ paths:
                   type: array
                   items:
                     type: string
+                    format: binary
                   description: Additional gallery images (URLs or file paths)
                 priceIncluded:
                   type: array

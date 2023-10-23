@@ -1,3 +1,4 @@
 export * from"./jwtfunctions.js"
 export * from"./passwordfunctions.js"
-export * from"./claudinary.js"
+export * from "./cloudinary.js";
+export * from "./photostorage.js"
