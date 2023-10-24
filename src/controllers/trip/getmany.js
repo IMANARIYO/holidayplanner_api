@@ -17,7 +17,6 @@ const findManyByUserId = (model) => {
         data: documents
       });
     } catch (error) {
-      console.log(`Error retrieving from ${model.modelName}`, error);
       res.status(500).json({
         message: `There was an error retrieving documents from the ${model.modelName}.`,
         error: error.message

@@ -9,7 +9,6 @@ const updateOneDynamic = model => {
       const updatedDoc = await model.findByIdAndUpdate(id, update, {
         new: true
       });
-console.log(req.body);
       if (!updatedDoc) {
         return res.status(404).json({
           message: `No document with ID: ${id} found in ${model.modelName} collection.`
@@ -21,7 +20,6 @@ console.log(req.body);
         data: updatedDoc
       });
     } catch (error) {
-      console.log(`Error updating ${model.modelName}`, error);
       res.status(500).json({
         message: `There was an error updating the ${model.modelName}.`,
         error: error.message

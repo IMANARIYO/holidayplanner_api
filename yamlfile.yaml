@@ -17,6 +17,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    
     User:
       type: object
       required:
@@ -171,7 +172,6 @@ components:
           format: binary
         gallery:
           type: array
-          format: binary
           items:
           type: string
           format: binary
@@ -182,7 +182,72 @@ components:
         priceNotIncluded:
           type: array
           items:
-            type: string   
+    Testimony:
+      type: object
+      required:
+        - userId
+        - userEmail
+        - rating
+        - body
+      properties:
+        userId:
+          type: string
+          format: uuid
+        userEmail:
+          type: string
+          format: email
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        body:
+          type: string
+      example:
+        rating: 5
+        body: "Great service!"
+    Booking:
+      type: object
+      properties:
+        userId:
+          type: string
+        userEmail:
+          type: string
+        tourId:
+          type: string
+        isPayed:
+          type: boolean
+        paymentMethod:
+          type: string
+          enum: ["credit_card", "paypal", "bank_transfer"]
+      required:
+        - userId
+        - userEmail
+        - tourId
+        - paymentMethod
+    Contact:
+     type: object
+     properties:
+       
+       message:
+         type: string
+         example: "This is a sample message from a user"
+       reply:
+         type: string
+         example: "This is a sample reply from admin"
+       dateSent:
+         type: string
+         format: date-time
+         example: "2021-09-30T12:34:56Z"
+       dateReplied:
+         type: string
+         format: date-time
+         example: "2021-10-01T10:10:10Z"
+    ContactUpdate:
+      type: object
+      properties:
+        reply:
+          type: string
+          example: "Updated reply from admin"
 paths:
   /auth/signup:
     post:
@@ -798,4 +863,566 @@ paths:
           description: Bad request, possibly due to missing fields or incorrect data format.
         500:
           description: Server error while searching for tours.
+  /testmony:
+    get:
+      summary: Retrieve all testimonies
+      tags: [Testimony]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Successfully retrieved list of testimonies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Testimony'
+        500:
+          description: Server error
+
+    post:
+      summary: Insert a new testimony
+      tags: [Testimony]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Testimony'
+      responses:
+        200:
+          description: Testimony added successfully
+        400:
+          description: Bad request
+        500:
+          description: Server error
+  /testmony/findone/{userId}:
+    get:
+      summary: Find a single testimony by User ID
+      tags: [Testimony]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which testimony is to be retrieved
+      responses:
+        200:
+          description: Successfully retrieved the testimony
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Testimony'
+        404:
+          description: No testimony found for the given user ID
+        500:
+          description: Server error
+  /testmony/findmany/{userId}:
+    get:
+      summary: Find many testimonies by User ID
+      tags: [Testimony]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which testimony is to be retrieved
+      responses:
+        200:
+          description: Successfully retrieved the testimony
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Testimony'
+        404:
+          description: No testimony found for the given user ID
+        500:
+          description: Server error
+  /testmony/delete/{id}:
+    delete:
+      summary: Delete a specific testimony by its ID
+      tags: [Testimony]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the testimony to be deleted
+      responses:
+        200:
+          description: Testimony deleted successfully
+        404:
+          description: No testimony found with the given ID
+        500:
+          description: Server error
+
+  /testmony/deletemany/{userId}:
+    delete:
+      summary: Delete all testimonies associated with a specific User ID
+      tags: [Testimony]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which all testimonies are to be deleted
+      responses:
+        200:
+          description: Testimonies deleted successfully for the given User ID
+        404:
+          description: No testimonies found for the given User ID
+        500:
+          description: Server error
+
+  /testmony/update/{id}:
+    patch:
+      summary: Update a specific testimony by its ID
+      tags: [Testimony]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the testimony to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Testimony'
+      responses:
+        200:
+          description: Testimony updated successfully
+        400:
+          description: Bad request
+        404:
+          description: No testimony found with the given ID
+        500:
+          description: Server error
+
+  /testmony/updatemany/{userId}:
+    patch:
+      summary: Update multiple testimonies associated with a specific User ID
+      tags: [Testimony]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ID of the user whose testimonies are to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Testimony'
+      responses:
+        200:
+          description: Testimonies updated successfully for the given User ID
+        400:
+          description: Bad request
+        404:
+          description: No testimonies found for the given User ID
+        500:
+          description: Server error
+  /book:
+    get:
+      summary: Retrieve all bookings
+      tags: [Bookings]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Successfully retrieved list of bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/booking'
+        401:
+          description: Unauthorized request
+        500:
+          description: Server error
+
+    post:
+      summary: Create a new booking
+      tags: [Bookings]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/booking'
+      responses:
+        200:
+          description: Booking created successfully
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized request
+        500:
+          description: Server error
+
+  /book/findone/{userId}:
+    get:
+      summary: Retrieve a booking by User ID
+      tags: [Bookings]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID of the booking to be retrieved
+      responses:
+        200:
+          description: Successfully retrieved the booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/booking'
+        404:
+          description: No booking found for the given user ID
+        500:
+          description: Server error
+
+  /book/findmany/{userId}:
+    get:
+      summary: Retrieve all bookings by User ID
+      tags: [Bookings]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which bookings are to be retrieved
+      responses:
+        200:
+          description: Successfully retrieved the bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/booking'
+        404:
+          description: No bookings found for the given user ID
+        500:
+          description: Server error
+
+  /book/delete/{id}:
+    delete:
+      summary: Delete a specific booking by its ID
+      tags: [Bookings]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the booking to be deleted
+      responses:
+        200:
+          description: Booking deleted successfully
+        404:
+          description: No booking found with the given ID
+        500:
+          description: Server error
+
+  /book/deletemany/{userId}:
+    delete:
+      summary: Delete all bookings associated with a specific User ID
+      tags: [Bookings]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which all bookings are to be deleted
+      responses:
+        200:
+          description: Bookings deleted successfully
+        404:
+          description: No bookings found for the given user ID
+        500:
+          description: Server error
+
+  /book/update:
+    patch:
+      summary: Update a booking
+      tags: [Bookings]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/booking'
+      responses:
+        200:
+          description: Booking updated successfully
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized request
+        500:
+          description: Server error
+
+  /book/updatemany/{userId}:
+    patch:
+      summary: Update multiple bookings associated with a specific User ID
+      tags: [Bookings]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which bookings are to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/booking'
+      responses:
+        200:
+          description: Bookings updated successfully
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized request
+        500:
+          description: Server error        
+  /contact:
+    post:
+      summary: Insert a new contact
+      tags: [Contacts]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactRequest'
+      responses:
+        200:
+          description: Contact added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        400:
+          description: Bad request
+        500:
+          description: Server error
+
+    get:
+      summary: Retrieve all contacts
+      tags: [Contacts]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Successfully retrieved list of contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        500:
+          description: Server error
+
+  /contact/delete/{id}:
+    delete:
+      summary: Delete a specific contact by its ID
+      tags: [Contacts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the contact to be deleted
+      responses:
+        200:
+          description: Contact deleted successfully
+        404:
+          description: No contact found with the given ID
+        500:
+          description: Server error
+
+  /contact/deletemany/{userId}:
+    delete:
+      summary: Delete all contacts associated with a specific User ID
+      tags: [Contacts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which all contacts are to be deleted
+      responses:
+        200:
+          description: Contacts deleted successfully for the given User ID
+        404:
+          description: No contacts found for the given User ID
+        500:
+          description: Server error
+
+  /contact/findone/{userId}:
+    get:
+      summary: Find a single contact by User ID
+      tags: [Contacts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which contact is to be retrieved
+      responses:
+        200:
+          description: Successfully retrieved the contact
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        404:
+          description: No contact found for the given user ID
+        500:
+          description: Server error
+
+  /contact/findmany/{userId}:
+    get:
+      summary: Find many contacts by User ID
+      tags: [Contacts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID for which contacts are to be retrieved
+      responses:
+        200:
+          description: Successfully retrieved the contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        404:
+          description: No contacts found for the given user ID
+        500:
+          description: Server error
+
+  /contact/update/{id}:
+    patch:
+      summary: Update a specific contact by its ID
+      tags: [Contacts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the contact to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdate'
+      responses:
+        200:
+          description: Contact updated successfully
+        400:
+          description: Bad request
+        404:
+          description: No contact found with the given ID
+        500:
+          description: Server error
+
+  /contact/updateMany/{userId}:
+    patch:
+      summary: Update multiple contacts associated with a specific User ID
+      tags: [Contacts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ID of the user whose contacts are to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdate'
+      responses:
+        200:
+          description: Contacts updated successfully for the given User ID
+        400:
+          description: Bad request
+        404:
+          description: No contacts found for the given User ID
+        500:
+          description: Server error        
+
+  
   

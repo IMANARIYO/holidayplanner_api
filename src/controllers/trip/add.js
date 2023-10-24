@@ -17,31 +17,40 @@ cloudinary.config({
 const insertOneDynamic = model => {
   return async (req, res) => {
     try {
-      if (req.files) {
-        let imagesArray = [];
-        let Image = (await cloudinary.uploader.upload(
+let tourId=req.tourId;
+
+let userId=req.userId,userEmail=req.userEmail
+      let newObject = { ...req.body,userId,userEmail,tourId };
+
+      if (req.files && req.files["image"]) {
+        newObject.image = (await cloudinary.uploader.upload(
           req.files["image"][0].path
         )).secure_url;
-        console.log(req.files);
-        for (let index = 0; index < 4; index++) {
+      }
+
+      if (req.files && req.files.gallery) {
+        let imagesArray = [];
+        for (let index = 0; index < req.files.gallery.length; index++) {
           imagesArray.push(
             (await cloudinary.uploader.upload(req.files.gallery[index].path))
               .secure_url
           );
         }
-        let add = await model.create({
-          ...req.body,
-          gallery: imagesArray,
-          image: Image
-        });
-        if (!add) {
-          return res.status(404).json({ message: "tour failed to add" });
-        }
-        res.status(200).json({
-          message: "tour created successfully",
-          data: add
-        });
+        newObject.gallery = imagesArray;
       }
+
+      let data = await model.create(newObject);
+
+      if (!data) {
+        return res
+          .status(404)
+          .json({ message: `${model.modelName} failed to add` });
+      }
+
+      return res.status(200).json({
+        message: `${model.modelName} created successfully`,
+        data: data
+      });
     } catch (err) {
       console.log(`Error adding ${model.modelName}`, err);
       return res.status(500).json({
@@ -51,7 +60,6 @@ const insertOneDynamic = model => {
     }
   };
 };
-
 export const insertTour = insertOneDynamic(tourconst);
 export const insertContact = insertOneDynamic(contactconst);
 export const insertTestimony = insertOneDynamic(testmonyconst);

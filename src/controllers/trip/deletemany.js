@@ -17,7 +17,6 @@ const deleteManyByUserId = model => {
         data: deletedDocuments
       });
     } catch (error) {
-      console.log(`Error deleting from ${model.modelName}`, error);
       res.status(500).json({
         message: `There was an error deleting documents from the ${model.modelName}.`,
         error: error.message

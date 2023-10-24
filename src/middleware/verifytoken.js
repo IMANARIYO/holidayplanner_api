@@ -19,6 +19,7 @@ if(!token){
             message:err.message,
         });
     }
+    req.user=decoded
     req.userId=decoded._id;
     req.userEmail=decoded.email
     next();
@@ -26,7 +27,6 @@ if(!token){
 );
 
 }catch(err){
-    console.log(err,"server error");
-    res.status(500).json({message:"internal server error"});
+    res.status(500).json({message:`internal server error${err}`},);
 }
 }

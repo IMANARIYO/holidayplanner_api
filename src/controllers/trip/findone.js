@@ -17,7 +17,6 @@ const findOneByUserId = model => {
         data: document
       });
     } catch (error) {
-      console.log(`Error retrieving from ${model.modelName}`, error);
       res.status(500).json({
         message: `There was an error retrieving the document from the ${model.modelName}.`,
         error: error.message

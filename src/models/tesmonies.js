@@ -10,7 +10,7 @@ const testmontSchema = mongoose.Schema({
   rating: {
     type: Number,
     required: true,
-    min: 1, // Assuming a scale of 1 to 5 for simplicity
+    min: 1,
     max: 5
   },
   body: {

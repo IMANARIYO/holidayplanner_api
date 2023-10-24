@@ -9,8 +9,8 @@ if(!user){
 }
 let isadmin=user.role == "admin"?true:false;
 if(!isadmin){
-    console.log(user.role)
-  return  res.status(401).json({message:"action is only reseverd for admins"})
+
+  return  res.status(401).json({message:`action is only reseverd for admins while ${user} role is "user"`})
 }
 
 next()

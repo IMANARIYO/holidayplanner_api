@@ -18,7 +18,6 @@ const updateManyByUserId = model => {
         data: updatedDocs
       });
     } catch (error) {
-      console.log(`Error updating in ${model.modelName}`, error);
       res.status(500).json({
         message: `There was an error updating documents in the ${model.modelName}.`,
         error: error.message

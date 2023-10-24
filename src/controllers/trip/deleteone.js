@@ -24,7 +24,6 @@ const deleteOneDynamic = model => {
         data: deleted
       });
     } catch (error) {
-      console.log(`Error deleting ${model.modelName}`, error);
       res.status(500).json({
         message: `There was an error deleting the ${model.modelName}.`,
         error: error.message
