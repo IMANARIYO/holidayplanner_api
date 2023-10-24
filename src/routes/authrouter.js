@@ -8,11 +8,13 @@ const authRouter=express.Router();
 authRouter.post("/signup", signup);
 authRouter.post("/login", login);
 
-authRouter.use(verifyingtoken)
+//authRouter.use(verifyingtoken)
 authRouter.get("/", getAllUsers);
 authRouter.post("/changepassword",verifyingtoken, changepassword);
-authRouter.post("/isadmin", verifyingtoken,isAdmin);
-authRouter.delete("/deleteuser/:id",isAdmin,deleteUser);
+authRouter.post("/isadmin",isAdmin);
+authRouter.delete("/deleteuser/:id", deleteUser);
+//authRouter.post("/isadmin", verifyingtoken, isAdmin);
+//authRouter.delete("/deleteuser/:id",isAdmin,deleteUser);
 // authRouter.get("/", getAllUsers);
 // authRouter.delete("/deleteuser/:id",deleteUser);
 export default authRouter;
