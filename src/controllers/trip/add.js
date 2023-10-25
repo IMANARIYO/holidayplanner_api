@@ -17,10 +17,9 @@ cloudinary.config({
 const insertOneDynamic = model => {
   return async (req, res) => {
     try {
-let tourId=req.tourId;
 
 let userId=req.userId,userEmail=req.userEmail
-      let newObject = { ...req.body,userId,userEmail,tourId };
+      let newObject = { ...req.body,userId,userEmail };
 
       if (req.files && req.files["image"]) {
         newObject.image = (await cloudinary.uploader.upload(

@@ -1,7 +1,7 @@
 import express from "express";
 import { verifyingtoken } from "../middleware/index.js";
 import { deleteContactsByUserId,getallcontacts, insertContact,deleteContact,updateContact,findContactByUserId,findContactsByUserId,updateManyContacts} from "../controllers/trip/index.js";
-
+import nodemailer from'nodemailer'
 const contactRouter = express.Router();
 contactRouter.use(verifyingtoken);
 contactRouter.post("/",insertContact);
