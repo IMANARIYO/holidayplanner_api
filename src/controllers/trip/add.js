@@ -5,6 +5,8 @@ import {
   bookingconst
 } from "../../models";
 import uploadCloudinary from "../../utils/cloudinary";
+import { contactHtmlMessage } from "../authentication/index.js";
+import { sendEmail } from "../../utils";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 dotenv.config();
@@ -17,9 +19,10 @@ cloudinary.config({
 const insertOneDynamic = model => {
   return async (req, res) => {
     try {
-
+let tourId=req.tourId;
 let userId=req.userId,userEmail=req.userEmail
       let newObject = { ...req.body,userId,userEmail };
+      
 
       if (req.files && req.files["image"]) {
         newObject.image = (await cloudinary.uploader.upload(
@@ -39,6 +42,12 @@ let userId=req.userId,userEmail=req.userEmail
       }
 
       let data = await model.create(newObject);
+      //checking if the request is contact as it has the message field
+      if(req.body.message){
+await sendEmail(userEmail, "your contact message have been received", "thank yoou for contacting us!", contactHtmlMessage);
+console.log(req.body.message)
+console.log(userEmail)
+      }
 
       if (!data) {
         return res

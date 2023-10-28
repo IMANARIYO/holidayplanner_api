@@ -2,7 +2,7 @@ import express from "express";
 import { verifyingtoken } from "../middleware/index.js";
 import { insertBooking, getAllBookings, deleteBooking,updateBooking,findBookingByUserId,findBookingsByUserId,deleteBookingsByUserId,updateManyBookings} from "../controllers/trip/index.js";
 const bookingRouter = express.Router();
-//bookingRouter.use(verifyingtoken)
+bookingRouter.use(verifyingtoken)
 bookingRouter.get("/",getAllBookings);
 bookingRouter.get("/findone/:userId",findBookingByUserId)
 bookingRouter.get("/findmany/:userId", findBookingsByUserId);

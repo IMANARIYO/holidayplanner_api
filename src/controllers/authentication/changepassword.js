@@ -4,9 +4,9 @@ export const changepassword=async (req,res)=>{
 
 try{
     const { currentpassword, newpassword } = req.body;
-const { userId } = req;
+const { userId,userEmail } = req;
 const user=await userconst.findById(userId)
-
+console.log("the passed useId",userId)
 console.log(user);
 if (!user) {
   return res.status(404).json({ message: "User not found" });

@@ -5,7 +5,7 @@ import { verifyingtoken } from "../middleware";
 
 const testmonyRouter=express.Router();
 
-//testmonyRouter.use(verifyingtoken)
+testmonyRouter.use(verifyingtoken)
 testmonyRouter.get("/",getAllTestimonies);
 testmonyRouter.get("/findone/:userId",findTestimonyByUserId)
 testmonyRouter.get("/findmany/:userId", findTestimoniesByUserId);
