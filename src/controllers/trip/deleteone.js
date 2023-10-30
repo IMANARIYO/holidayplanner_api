@@ -1,8 +1,8 @@
 import { tourconst, contactconst, testmonyconst,bookingconst,userconst } from "../../models"; 
-
+import { catchAsync } from "../../middleware/index.js";
 const deleteOneDynamic = model => {
-  return async (req, res) => {
-    try {
+  return async (req, res,next) => {
+
       const id = req.params.id;
 
       let document = await model.findById(id);
@@ -23,19 +23,14 @@ const deleteOneDynamic = model => {
         message: `${model.modelName} deleted successfully.`,
         data: deleted
       });
-    } catch (error) {
-      res.status(500).json({
-        message: `There was an error deleting the ${model.modelName}.`,
-        error: error.message
-      });
-    }
+  
   };
 };
-export const deleteUser = deleteOneDynamic(userconst);
-export const deleteTour = deleteOneDynamic(tourconst);
-export const deleteContact = deleteOneDynamic(contactconst);
-export const deleteTestimony = deleteOneDynamic(testmonyconst);
-export const deleteBooking = deleteOneDynamic(bookingconst);
+export const deleteUser =     catchAsync(deleteOneDynamic(userconst));
+export const deleteTour =     catchAsync(deleteOneDynamic(tourconst));
+export const deleteContact =  catchAsync(deleteOneDynamic(contactconst));
+export const deleteTestimony =catchAsync(deleteOneDynamic(testmonyconst));
+export const deleteBooking =  catchAsync(deleteOneDynamic(bookingconst));
 
 
 

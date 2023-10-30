@@ -1,6 +1,8 @@
 import { tourconst, contactconst, testmonyconst,bookingconst, userconst } from "../../models"; 
+import { catchAsync } from "../../middleware/index.js";
+
 const findOneDynamic = model => {
-  return async (req, res) => {
+  return async (req, res,next) => {
     try {
       const id = req.params.id;
 const allDocs = await model.find();
@@ -23,10 +25,10 @@ const allDocs = await model.find();
     }
   };
 };
-export const findUser= findOneDynamic(userconst);
-export const findTour = findOneDynamic(tourconst);
-export const findContact = findOneDynamic(contactconst);
-export const findTestimony = findOneDynamic(testmonyconst);
-export const findBooking = findOneDynamic(bookingconst);
+export const findUser= catchAsync(findOneDynamic(userconst));
+export const findTour = catchAsync(findOneDynamic(tourconst));
+export const findContact =catchAsync( findOneDynamic(contactconst));
+export const findTestimony =catchAsync(findOneDynamic(testmonyconst));
+export const findBooking = catchAsync(findOneDynamic(bookingconst));
 
 

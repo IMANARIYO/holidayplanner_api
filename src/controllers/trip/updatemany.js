@@ -1,10 +1,11 @@
 import { tourconst, contactconst, testmonyconst,bookingconst,userconst } from "../../models";
+import { catchAsync } from "../../middleware/index.js";
 const updateManyByUserId = model => {
-  return async (req, res) => {
+  return async (req, res,next) => {
     const { userId } = req.params; 
     const update = req.body;
 
-    try {
+    
       const updatedDocs = await model.updateMany({ userId: userId }, update);
 
       if (updatedDocs.nModified === 0) {
@@ -17,17 +18,12 @@ const updateManyByUserId = model => {
         message: `${updatedDocs.nModified} documents in ${model.modelName} updated successfully.`,
         data: updatedDocs
       });
-    } catch (error) {
-      res.status(500).json({
-        message: `There was an error updating documents in the ${model.modelName}.`,
-        error: error.message
-      });
-    }
+    
   };
 };
 
-export const updateManyTours = updateManyByUserId(tourconst);
-export const updateManyContacts = updateManyByUserId(contactconst);
-export const updateManyUsers = updateManyByUserId(userconst);
-export const updateManyBookings = updateManyByUserId(bookingconst);
-export const updateManyTestimonies = updateManyByUserId(testmonyconst);
+export const updateManyTours =catchAsync( updateManyByUserId(tourconst));
+export const updateManyContacts =catchAsync(updateManyByUserId(contactconst));
+export const updateManyUsers =catchAsync(updateManyByUserId(userconst));
+export const updateManyBookings = catchAsync(updateManyByUserId(bookingconst));
+export const updateManyTestimonies = catchAsync(updateManyByUserId(testmonyconst));

@@ -1,11 +1,11 @@
 import { tourconst, contactconst, userconst,bookingconst,testmonyconst } from "../../models"
-
+import { catchAsync } from "../../middleware/index.js";
 const updateOneDynamic = model => {
   return async (req, res) => {
     const { id } = req.params;
     const update = req.body;
 
-    try {
+ 
       const updatedDoc = await model.findByIdAndUpdate(id, update, {
         new: true
       });
@@ -19,17 +19,12 @@ const updateOneDynamic = model => {
         message: `${model.modelName} updated successfully.`,
         data: updatedDoc
       });
-    } catch (error) {
-      res.status(500).json({
-        message: `There was an error updating the ${model.modelName}.`,
-        error: error.message
-      });
-    }
+    
   };
 };
    
-export const updateTour = updateOneDynamic(tourconst);
-export const updateContact = updateOneDynamic(contactconst);
-export const updateUser = updateOneDynamic(userconst);
-export const updateBooking = updateOneDynamic(bookingconst);
-export const updateTestimony = updateOneDynamic(testmonyconst);
+export const updateTour =  catchAsync(updateOneDynamic(tourconst));
+export const updateContact = catchAsync( updateOneDynamic(contactconst));
+export const updateUser =  catchAsync(updateOneDynamic(userconst));
+export const updateBooking =  catchAsync(updateOneDynamic(bookingconst));
+export const updateTestimony = catchAsync( updateOneDynamic(testmonyconst));
