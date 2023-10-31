@@ -16,7 +16,7 @@ if(!token){
        jwt.verify(token,process.env.JWT_SECRET,(err,decoded)=>{
            if(err){
         return res.status(401).json({
-            message:err.message,
+            messagefromverifytoken:err.message,
         });
     }
     req.user=decoded
@@ -27,6 +27,6 @@ if(!token){
 );
 
 }catch(err){
-    res.status(500).json({message:`internal server error${err}`},);
+    res.status(500).json({message:`internal server from verify token error${err}`},);
 }
 }

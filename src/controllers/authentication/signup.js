@@ -4,12 +4,8 @@ import { userconst } from "../../models/index.js";
 import { sendEmail } from "../../utils/index.js";
 import nodemailer from"nodemailer"
 import { htmlMessage } from "./messages.js";
- export const signup = async (req, res) => {
-   try {
-
-    
-
- 
+import { catchAsync } from "../../middleware/index.js";
+ export const signup =catchAsync( async (req, res,next) => {
     //Check if user exists
      let user = await userconst.findOne({ email: req.body.email });
      if (user) {
@@ -17,18 +13,13 @@ import { htmlMessage } from "./messages.js";
     
       });
      }
-
      // Hash the password and create a new user
      let hashedPassword = await passHashing(req.body.password);
      let newUserDetails = { ...req.body, password: hashedPassword };
      let newUser = await userconst.create(newUserDetails);
- 
-
 await sendEmail(newUser.email, "Welcome to Our Platform title", "Thank you for registering with useeeeeeeeeeeeeeee!", htmlMessage);
-
      // Generate token
      let token = tokengenerating({ _id: newUser._id, email: newUser.email });
-
      //Return response
      res
        .status(200)
@@ -43,8 +34,4 @@ await sendEmail(newUser.email, "Welcome to Our Platform title", "Thank you for r
            role: newUser.role
          }
        });
-   } catch (err) {
-     console.error(err);
-     res.status(500).json({ message: "Server Error" });
-   }
- };
+ });

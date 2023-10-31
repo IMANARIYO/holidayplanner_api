@@ -8,7 +8,7 @@ const authRouter=express.Router();
 authRouter.post("/signup", signup);
 authRouter.post("/login", login);
 
-authRouter.use(verifyingtoken)
+//authRouter.use(verifyingtoken)
 authRouter.get("/", getAllUsers);
 authRouter.post("/changepassword",changepassword)
 authRouter.delete("/deleteAll", isAdmin,deleteAllUsers);
