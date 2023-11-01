@@ -1,6 +1,7 @@
 import express  from "express";
 import { isAdmin } from "../middleware/index.js";
-import { findUserByUserId,deleteUser, getAllUsers, deleteAllUsers,updateUser } from "../controllers/trip";
+import { deleteUser, getAllUsers, deleteAllUsers,updateUser } from "../controllers/trip";
+import { findUser } from "../controllers/trip/findbyid.js";
 import { signup,login,changepassword }from "../controllers/authentication/index.js";
 import { verifyingtoken } from "../middleware/index.js";
 const authRouter=express.Router();
@@ -10,7 +11,7 @@ authRouter.post("/login", login);
 
 //authRouter.use(verifyingtoken)
 authRouter.get("/", getAllUsers);
-authRouter.get("/findone/:userId", findUserByUserId);
+authRouter.get("/findone/:id", findUser);
 authRouter.post("/changepassword",changepassword)
 authRouter.delete("/deleteAll", isAdmin,deleteAllUsers);
 authRouter.post("/isadmin",isAdmin);

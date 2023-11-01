@@ -352,19 +352,19 @@ paths:
           description: Unauthorized request
         500:
           description: Server error
-  /auth/findone/{userId}:
+  /auth/findone/{id}:
     get:
-      summary: Retrieve a given userby Id
+      summary: Retrieve a given userby  its id
       tags: [Authentication]
       security:
         - bearerAuth: []
       parameters:
         - in: path
-          name: userId
+          name: id
           schema:
             type: string
           required: true
-          description: User ID to be searched  
+          description: User id to be searched  
       responses:
         200:
           description: Successfully retrieved list of users
