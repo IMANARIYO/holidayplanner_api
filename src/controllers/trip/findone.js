@@ -1,16 +1,18 @@
 import { tourconst, contactconst, testmonyconst,bookingconst,userconst } from "../../models"; 
-import { catchAsync } from "../../middleware/index.js";
+import { catchAsync,AppError } from "../../middleware/index.js";
+
 const findOneByUserId = model => {
-  return async (req, res) => {
+  return async (req, res,next) => {
     const { userId } = req.params;
 
 
       const document = await model.findOne({ userId: userId });
 
       if (!document) {
-        return res.status(404).json({
-          message: `No document with userId: ${userId} found in ${model.modelName} collection.`
-        });
+        // return res.status(404).json({
+        //   message: `No document with userId: ${userId} found in ${model.modelName} collection.`
+        // });
+        return next(new AppError(`No document with userId: ${userId} found in ${model.modelName} collection.`,404));
       }
 
       res.status(200).json({

@@ -352,6 +352,32 @@ paths:
           description: Unauthorized request
         500:
           description: Server error
+  /auth/findone/{userId}:
+    get:
+      summary: Retrieve a given userby Id
+      tags: [Authentication]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID to be searched  
+      responses:
+        200:
+          description: Successfully retrieved list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        401:
+          description: Unauthorized request
+        500:
+          description: Server error          
 
   /tour:
     get:
