@@ -7,7 +7,7 @@ dotenv.config();
 import express from "express";
 import { findTour } from "../controllers/trip/findbyid.js";
 const tourRouter=express.Router();
-tourRouter.use(verifyingtoken);
+//tourRouter.use(verifyingtoken);
 tourRouter.get("/", getalltours);
 tourRouter.post("/search",searchTours);
 tourRouter.post("/", uploaded, insertTour);

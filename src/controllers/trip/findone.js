@@ -9,9 +9,7 @@ const findOneByUserId = model => {
       const document = await model.findOne({ userId: userId });
 
       if (!document) {
-        // return res.status(404).json({
-        //   message: `No document with userId: ${userId} found in ${model.modelName} collection.`
-        // });
+        
         return next(new AppError(`No document with userId: ${userId} found in ${model.modelName} collection.`,404));
       }
 

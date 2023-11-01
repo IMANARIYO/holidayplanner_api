@@ -11,12 +11,15 @@ export const errosingeneral = (err, req, res, next) => {
       message: err.message
     });
   }
-  console.error("🚫 ERROR 🚫", err);
+  // console.error("🚫 ERROR 🚫", err);
   return res.status(500).json({
     status: "error",
     message: "Something went wrong!",
-    error:err.message
+    error:err.message,
+    errorname:err.name,
+    errorvalue:err.value
   });
+ 
 };
 
      export class AppError extends Error {
@@ -27,10 +30,12 @@ export const errosingeneral = (err, req, res, next) => {
      this.isOperational = true;
      Error.captureStackTrace(this, this.constructor);
    }
+   
  }
-
-
-
+const handleCastErrorDb=err=>{
+  const message=`invalid ${err.value}.`
+  return new AppError(message,404);
+}
 export const catchAsync = fn => {
   return(req,res,next)=>{
      fn(req, res, next).catch(next);
@@ -47,6 +52,7 @@ const sendErrorDev=(err,res)=>{
    });
 }
 const sendErrorpro = (err, res) => {
+  console.log("in sendpro",err)
     if (err.isOperational) {
   res.status(err.statusCode).json({
     status: err.status,
@@ -54,15 +60,14 @@ const sendErrorpro = (err, res) => {
   
   });}
   else{
+    console.error('error',err);
     res.status(500).json({
-      statu
+      status:'error',
+      message:'something went wrong   said by"sendErrorpro "'
+
     })
   }
 };
-
-
-
-
 export const duringprocess=(req,res,err,next)=>{
   err.statusCode=err.statusCode||500;
   err.status=err.status||'error';
@@ -71,8 +76,13 @@ export const duringprocess=(req,res,err,next)=>{
    sendErrorDev(err,res);
   }
   else if(process.env.NODE_ENV === 'production'){
-   sendErrorpro(err,res);
+    let error={...err};
+    if(err.name ===' CastError'){
+error=handleCastErrorDb(error);
+    }
+   sendErrorpro(error,res);
   }
+  next()
 }
 
 

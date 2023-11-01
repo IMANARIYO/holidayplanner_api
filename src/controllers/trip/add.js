@@ -21,11 +21,10 @@ const insertOneDynamic = model =>
  {    
     return async (req, res,next) =>
    {
-    
        let tourId=req.tourId;
        let userId=req.userId,userEmail=req.userEmail
       let newObject = { ...req.body,userId,userEmail };
-      
+      let id=userId;
 
       if (req.files && req.files["image"])
        {

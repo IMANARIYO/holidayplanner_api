@@ -15,7 +15,8 @@ const bookingSchema = mongoose.Schema({
     ref: "tourSchema",
     required: true
   },
-
+  whoBooked:{type:Object},
+  tourBooked:{type:Object},
   isPayed: {
     type: Boolean,
     default: false
@@ -23,7 +24,11 @@ const bookingSchema = mongoose.Schema({
   paymentMethod: {
     type: String,
     enum: ["credit_card", "paypal", "bank_transfer"], 
-    required: true
+    required: false
+  },
+  numberOfTickets:{
+    type:Number,
+    required:true
   }
 });
 export const bookingconst = mongoose.model("bookings", bookingSchema);
