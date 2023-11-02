@@ -13,7 +13,7 @@ authRouter.post("/login", login);
 authRouter.get("/", getAllUsers);
 authRouter.get("/findone/:id", findUser);
 authRouter.post("/changepassword",changepassword)
-authRouter.delete("/deleteAll", isAdmin,deleteAllUsers);
+authRouter.delete("/deleteAll", deleteAllUsers);
 authRouter.post("/isadmin",isAdmin);
 authRouter.delete("/deleteuser/:id",isAdmin,deleteUser);
 authRouter.patch("/updateuserbyid/:id",updateUser)

@@ -28,7 +28,8 @@ const bookingSchema = mongoose.Schema({
   },
   numberOfTickets:{
     type:Number,
-    required:true
+    required:true,
+    default:"0"
   }
 });
 export const bookingconst = mongoose.model("bookings", bookingSchema);

@@ -2,7 +2,8 @@ import {
   tourconst,
   contactconst,
   testmonyconst,
-  bookingconst
+  bookingconst,
+  userconst
 } from "../../models";
 import uploadCloudinary from "../../utils/cloudinary";
 import { contactHtmlMessage } from "../authentication/index.js";
@@ -18,13 +19,22 @@ cloudinary.config({
 });
 
 const insertOneDynamic = model =>
- {    
+ { 
+
     return async (req, res,next) =>
    {
-       let tourId=req.tourId;
-       let userId=req.userId,userEmail=req.userEmail
-      let newObject = { ...req.body,userId,userEmail };
+       let tourId = req.tourId||req.body.tourId;
+       let userId = req.userId||"653936f5fc45548814008e48",
+         userEmail = req.userEmail || "imanariyobaptiste@gmaiil.com";
+         console.log(userId,userEmail);
+        console.log("the given tour id in add. js is ",userId)
+   let  whoBooked=await userconst.findById(userId)
+          console.log("whobooked", whoBooked);
+   let tourBooked=await tourconst.findById(tourId)       
+       
+      let newObject = { ...req.body,userId,userEmail,whoBooked,tourBooked};
       let id=userId;
+
 
       if (req.files && req.files["image"])
        {

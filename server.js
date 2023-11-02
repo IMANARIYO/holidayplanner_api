@@ -7,23 +7,20 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import mainRouter from "./src/routes/index.js";
 import swaggerUi from "swagger-ui-express";
-import {
-  badroutes,
-  errosingeneral,
-  duringprocess
-} from "./src/middleware/index.js";
+import { badroutes, errosingeneral,duringprocess } from "./src/middleware/index.js";
 const app = express();
 
 const swaggerDocument = yaml.load("./yamlfile.yaml");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/", mainRouter);
-app.all("*", badroutes);
+app.all('*',badroutes)
 app.use(errosingeneral);
-app.use(duringprocess);
-mongoose
-  .connect(process.env.DB_CONNECTION_LIVE, {
+
+mongoose.connect(process.env.DB_CONNECTION_LIVE, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -36,4 +33,5 @@ mongoose
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on http://localhost:${process.env.PORT}`);
+  
 });

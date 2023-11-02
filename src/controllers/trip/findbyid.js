@@ -3,7 +3,7 @@ import { catchAsync } from "../../middleware/index.js";
 
 const findOneDynamic = model => {
   return async (req, res,next) => {
-    try {
+    // try {
       const id = req.params.id;
 const allDocs = await model.find();
       let document = await model.findOne({_id:id});
@@ -17,12 +17,12 @@ const allDocs = await model.find();
         message: `${model.modelName} retrieved successfully.`,
         data: document
       });
-    } catch (error) {
-      res.status(500).json({
-        message: `There was an error retrieving the ${model.modelName}.`,
-        error: error.message
-      });
-    }
+    // // } catch (error) {
+    // //   res.status(500).json({
+    // //     message: `There was an error retrieving the ${model.modelName}.`,
+    // //     error: error.message
+    // //   });
+    // }
   };
 };
 export const findUser= catchAsync(findOneDynamic(userconst));
