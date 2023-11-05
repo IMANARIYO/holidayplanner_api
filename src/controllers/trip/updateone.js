@@ -2,10 +2,10 @@ import { tourconst, contactconst, userconst,bookingconst,testmonyconst } from ".
 import { catchAsync } from "../../middleware/index.js";
 const updateOneDynamic = model => {
   return async (req, res) => {
-    const { id } = req.params;
+    let id = req.params.id;
     const update = req.body;
 
- 
+ console.log("id up on which to update is going to take place on is at ", req.params.id);
       const updatedDoc = await model.findByIdAndUpdate(id, update, {
         new: true
       });

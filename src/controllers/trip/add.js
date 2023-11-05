@@ -3,8 +3,12 @@ import {
   contactconst,
   testmonyconst,
   bookingconst,
-  userconst
+  userconst,
+  relpyconst
 } from "../../models";
+import ejs from"ejs"
+import findContact from"./findbyid.js"
+import { replymessage } from "../authentication/index.js";
 import uploadCloudinary from "../../utils/cloudinary";
 import { contactHtmlMessage } from "../authentication/index.js";
 import { sendEmail } from "../../utils";
@@ -24,25 +28,35 @@ const insertOneDynamic = model =>
     return async (req, res,next) =>
    {
        let tourId = req.tourId||req.body.tourId;
-       let userId = req.userId||"653936f5fc45548814008e48",
-         userEmail = req.userEmail || "imanariyobaptiste@gmaiil.com";
-         console.log(userId,userEmail);
-        console.log("the given tour id in add. js is ",userId)
+       if(!req.userId||!req.userEmail){
+       var userId = req.userId||"653936f5fc45548814008e48",
+         userEmail = req.userEmail || "admin@gmail.com";
+        }else{
+           var userId = req.userId ,
+             userEmail = req.userEmail;
+        } 
+        console.log(userId,userEmail);
    let  whoBooked=await userconst.findById(userId)
-          console.log("whobooked", whoBooked);
-   let tourBooked=await tourconst.findById(tourId)       
+   let tourBooked=await tourconst.findById(tourId) 
+    if (!tourBooked && req.body.paymentMethod) {
+      return res
+        .status(404)
+        .json({
+          message: `No tour  with ID: ${tourId} found in  in tours collection.`
+        });
+    }
+      
        
       let newObject = { ...req.body,userId,userEmail,whoBooked,tourBooked};
       let id=userId;
 
-
+//in case we are going to make    tour which has   fields of gallery and of image  which has to be of files
       if (req.files && req.files["image"])
        {
                 newObject.image = (await cloudinary.uploader.upload(
                   req.files["image"][0].path
                 )).secure_url;
       }
-
       if (req.files && req.files.gallery)
        {
            console.log("in gallery")
@@ -57,8 +71,6 @@ const insertOneDynamic = model =>
       if(req.body.message)
       {
         await sendEmail(userEmail, "your contact message have been received", "thank yoou for contacting us!", contactHtmlMessage);
-        console.log(req.body.message)
-        console.log(userEmail)
       }
 
       if (!data)
@@ -76,3 +88,42 @@ export const insertTour = catchAsync(insertOneDynamic(tourconst));
 export const insertContact = catchAsync(insertOneDynamic(contactconst));
 export const insertTestimony = catchAsync(insertOneDynamic(testmonyconst));
 export const insertBooking = catchAsync(insertOneDynamic(bookingconst));
+export const insertReply = catchAsync(insertOneDynamic(relpyconst));
+
+
+//reply   
+export const replyfunction=async (req,res)=>{
+var id = req.params.id;
+  const  contact=await contactconst.findById(id);
+   if (!contact) {
+     return res
+       .status(404)
+       .json({
+         message: `No document with ID: ${id} found in  contacts  collection. please try to use  a valid contact id `
+       });
+       //auto consuming id of contact on which the
+   }  
+ //auto consuming id of contact on which the contact was made
+ req.body.contactId = id;
+ req.body.adminEmail=req.userEmail;
+ let ToBeReplied = contact.userEmail;
+
+contact.reply=req.body;
+contact.dateReplied = new Date();
+await contact.save();
+if(!req.body.reply||req.body.reply==" "){
+   return res
+     .status(404)
+     .json({
+       message: `you can not send empt reply`
+     });
+}
+let reply=await relpyconst.create(req.body);
+
+const renderedTemplate = ejs.render(replymessage, { reply: contact.reply });
+console.log("tobereplied",ToBeReplied)
+ await sendEmail(ToBeReplied, "your response from holiday planner", "thank yoou for contacting us!", replymessage,req.userEmail);
+ return res.status(202).json({ message: `reply made successfully`,
+ reply:reply});
+
+}

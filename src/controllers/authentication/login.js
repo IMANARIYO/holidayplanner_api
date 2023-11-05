@@ -3,6 +3,7 @@ import  {userconst}  from "../../models/index.js";
 import { passComparer,tokengenerating,passHashing } from "../../utils/index.js";
 export const login= async (req,res) =>{
 try{
+  console.log(req.body.email);
 let user = await userconst.findOne({email:req.body.email});
 if(user){
     

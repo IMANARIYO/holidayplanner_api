@@ -9,7 +9,7 @@ info:
     url: "tel:0787795163"
   description: "Phone: 0787795163"
 servers:
-  - url: "http://localhost:8800"
+  - url: http://localhost:8800
 components:
   securitySchemes:
     bearerAuth:
@@ -17,12 +17,58 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    contactReply:
+      type: object
+      required:
+        - contactId
+        - reply
+        - subject
+      properties:
+        contactId:
+          type: string
+          example: "65351a0ab0f03f321b7d736d" # Replace with an actual contact ID
+        subject:
+          type: string
+          example: "type the subject  of message" # Replace with the reply message
+        reply:
+          type: string
+          example: "type a  reply message here" # Replace with the reply messagereply:
+  
+    booking:
+      type: object
+      properties:
+        
+        tourId:
+          type: string
+          example: "65351a0ab0f03f321b7d736d"
+        isPayed:
+          type: boolean
+          example: false
+        paymentMethod:
+          type: string
+          enum: ["credit_card", "paypal", "bank_transfer"]
+          example: "credit_card"
+        numberOfTickets:
+          type: number
+          example: 2 # Replace with the actual number of tickets
+        Date:
+              type: string
+              example: "2023-11-03T12:34:56.789Z"   
+        status:
+          type: string
+          example: "pending" # You can set a different example value
+      required:
+        - userId
+        - userEmail
+        - tourId
+        - paymentMethod  
     User:
       type: object
       required:
         - fullNames
         - email
         - password
+        - Date
       properties:
         fullNames:
           type: string
@@ -204,29 +250,9 @@ components:
       example:
         rating: 5
         body: "Great service!"
-    ooking:
-      type: object
-      properties:
-   
-        tourId:
-          type: string
-        isPayed:
-          type: boolean
-        paymentMethod:
-          type: string
-          enum: ["credit_card", "paypal", "bank_transfer"]
-      required:
-        - userId
-        - userEmail
-        - tourId
-        - paymentMethod
-      example:
-        tourId: 1232323232asde
-        paymentMethod: "credit_card"
     Contact:
      type: object
      properties:
-       
        message:
          type: string
          example: "This is a sample message from a user"
@@ -247,88 +273,48 @@ components:
         reply:
           type: string
           example: "Updated reply from admin"
-    booking:
-      type: object
-      properties:
-        tourId:
-          type: string
-          example: "65351a0ab0f03f321b7d736d"
-        whoBooked:
-          type: object
-          example: {} # Replace with actual example
-        tourBooked:
-          type: object
-          example: {} # Replace with actual example
-        isPayed:
-          type: boolean
-          example: true
-        paymentMethod:
-          type: string
-          enum: ["credit_card", "paypal", "bank_transfer"]
-          example: "credit_card"
-        numberOfTickets:
-          type: number
-          example: 2 # Replace with the actual number of tickets
-      required:
-        - userId
-        - userEmail
-        - tourId
-        - paymentMethod
-      example:
-        userId: "653fe777277839570d66d38d"
-        userEmail: "furaha@gmail.com"
-        tourId: "65351a0ab0f03f321b7d736d"
-        whoBooked:
-          {} # Replace with actual example
-        tourBooked:
-          {} # Replace with actual example
-        isPayed: true
-        paymentMethod: "credit_card"
-        numberOfTickets: 2 # Replace with the actual number of ticketsbooking:
-      type: object
-      properties:
-        userId:
-          type: string
-  
-        userEmail:
-          type: string
-
-        tourId:
-          type: string
-          example: "65351a0ab0f03f321b7d736d"
-        whoBooked:
-          type: object
-          example: {} # Replace with actual example
-        tourBooked:
-          type: object
-          example: {} # Replace with actual example
-        isPayed:
-          type: boolean
-          example: true
-        paymentMethod:
-          type: string
-          enum: ["credit_card", "paypal", "bank_transfer"]
-          example: "credit_card"
-        numberOfTickets:
-          type: number
-          example: 2 # Replace with the actual number of tickets
-      required:
-        - userId
-        - userEmail
-        - tourId
-        - paymentMethod
-      example:
-        userId: "653fe777277839570d66d38d"
-        userEmail: "furaha@gmail.com"
-        tourId: "65351a0ab0f03f321b7d736d"
-        whoBooked:
-          {} # Replace with actual example
-        tourBooked:
-          {} # Replace with actual example
-        isPayed: true
-        paymentMethod: "credit_card"
-        numberOfTickets: 2 # Replace with the actual number of tickets      
+       
 paths:
+  /auth/signup:
+    post:
+      summary: Register a new user
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignupRequest'
+      responses:
+        '200':
+          description: Successfully registered
+        '409':
+          description: Email already exists
+  /contact/reply/{id}:
+    post:
+      summary: Reply to a contact request
+      tags: [Contacts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of the contact to reply to
+          required: true
+          schema:
+            type: string
+          example: "65351a0ab0f03f321b7d736d" # Replace with an actual contact ID
+      requestBody:
+        description: Reply details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contactReply'
+      responses:
+        '202':
+          description: Reply made successfully
+        '404':
+          description: Error response 
   /auth/signup:
     post:
       summary: Register a new user
@@ -1338,11 +1324,11 @@ paths:
         - bearerAuth: []
       parameters:
         - in: path
-          name: userId
+          name: id
           schema:
             type: string
           required: true
-          description: User ID for which all bookings are to be deleted  
+          description: ID  booking  to be updated  
       requestBody:
         required: true
         content:
@@ -1358,6 +1344,35 @@ paths:
           description: Unauthorized request
         500:
           description: Server error
+  /book/approveBooking/{id}:
+    patch:
+      summary: approove a booking
+      tags: [Bookings]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: booking ID for which all approving is going to take place  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/booking'
+      responses:
+        200:
+          description: Booking updated successfully
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized request
+        500:
+          description: Server error
+        
 
   /book/updatemany/{userId}:
     patch:

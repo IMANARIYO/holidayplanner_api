@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
-
-export const sendEmail = async (to, subject, textContent, htmlContent) => {
+import { isAdmin } from "../middleware";
+export const sendEmail = async (to, subject, textContent, htmlContent,req,adminEmail) => {
   try {
   
     let transporter = nodemailer.createTransport({
@@ -20,6 +20,16 @@ export const sendEmail = async (to, subject, textContent, htmlContent) => {
       text: textContent,
       html: htmlContent 
     };
+    if(adminEmail && isAdmin()){
+   let mailOptions = {
+      from: adminEmail,
+      to: to,
+      subject: subject,
+      text: textContent,
+      html: htmlContent 
+    };
+
+}
 
     await transporter.sendMail(mailOptions);
   } catch (error) {

@@ -211,4 +211,19 @@ export const contactHtmlMessage = `
   </body>
 </html>
 `;
-
+export const replymessage = `<!DOCTYPE html>
+<html>
+<head>
+  <title>Reply to Contact</title>
+</head>
+<body>
+  <div style="font-family: Arial, sans-serif; margin: 20px;">
+    <h1>Hello,</h1>
+    <p>Your reply to a contact:</p>
+    <p>{{reply}}</p>
+    <p>Best regards,</p>
+    <p>Your Name</p>
+  </div>
+</body>
+</html>
+`;

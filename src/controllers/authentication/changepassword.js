@@ -1,6 +1,6 @@
 import { userconst } from "../../models/index.js";
 import { passComparer,passHashing } from "../../utils/index.js";
-export const changepassword=async (req,res)=>{
+export const changepassword=async (req,res,next)=>{
 try{
     const { currentpassword, newpassword } = req.body;
 const { userId,userEmail } = req;
@@ -26,4 +26,5 @@ if (!isPasswordCorrect) {
 }catch(err){
     console.log("catch:",err.message,err.name)
 }
+
 }

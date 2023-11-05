@@ -16,8 +16,8 @@ const contactSchema = mongoose.Schema({
     required: true
   },
   reply: {
-    type: String,
-    default: null
+    type: Object,
+    default: undefined
   },
   dateSent: {
     type: Date,
@@ -28,4 +28,26 @@ const contactSchema = mongoose.Schema({
     default: null
   }
 });
+
+const contactreplySchema = mongoose.Schema({
+  contactId: {
+    type: Schema.Types.ObjectId,
+    required: true
+  },
+  adminEmail: {
+    type: String,
+    required: true
+  },
+  subject: {
+    type: String,
+    default: "replying your last contact received"
+  },
+  reply: {
+    type: String,
+    required: true
+  }
+});
+
+export const relpyconst = mongoose.model("repliesToContacts", contactreplySchema);
+
 export const contactconst=mongoose.model("contacts",contactSchema)
