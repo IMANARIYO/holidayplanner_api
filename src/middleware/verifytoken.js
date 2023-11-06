@@ -27,6 +27,6 @@ if(!token){
 );
 
 }catch(err){
-    res.status(500).json({message:`internal server from verify token error${err}`},);
+    res.status(500).json({message:`internal server from verify token error${err.message}`},);
 }
 }

@@ -1,7 +1,8 @@
 import { tourconst,bookingconst } from "../../models/index.js";
-export const approveBooking=async (req,res)=>{
+import { catchAsync } from "../../middleware/err.js";
+export const approveBooking=async (req,res,next)=>{
 let id= req.params.id;
-console.log("id in approval",id)
+// console.log("id in approval",id)
 let booking= await bookingconst.findById(id)
         if (!booking) {
           return res
@@ -23,3 +24,4 @@ let booking= await bookingconst.findById(id)
     return res.status(200).json({message:"booking approved successsfully"
     ,approvedebooking:booking})
 }
+catchAsync(approveBooking)

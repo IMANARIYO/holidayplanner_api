@@ -9,7 +9,7 @@ info:
     url: "tel:0787795163"
   description: "Phone: 0787795163"
 servers:
-  - url: https://holidayplanner.onrender.com
+  - url:  http://localhost:8800
 components:
   securitySchemes:
     bearerAuth:

@@ -50,7 +50,7 @@ const insertOneDynamic = model =>
       let newObject = { ...req.body,userId,userEmail,whoBooked,tourBooked};
       let id=userId;
 
-//in case we are going to make    tour which has   fields of gallery and of image  which has to be of files
+     //in case we are going to make    tour which has   fields of gallery and of image  which has to be of files
       if (req.files && req.files["image"])
        {
                 newObject.image = (await cloudinary.uploader.upload(
@@ -82,7 +82,9 @@ const insertOneDynamic = model =>
 
       return res.status(200).json({message: `${model.modelName} created successfully`,
         data: data });
+         next();
     }
+   
   }
 export const insertTour = catchAsync(insertOneDynamic(tourconst));
 export const insertContact = catchAsync(insertOneDynamic(contactconst));
@@ -92,38 +94,40 @@ export const insertReply = catchAsync(insertOneDynamic(relpyconst));
 
 
 //reply   
-export const replyfunction=async (req,res)=>{
-var id = req.params.id;
-  const  contact=await contactconst.findById(id);
-   if (!contact) {
-     return res
-       .status(404)
-       .json({
-         message: `No document with ID: ${id} found in  contacts  collection. please try to use  a valid contact id `
-       });
-       //auto consuming id of contact on which the
-   }  
- //auto consuming id of contact on which the contact was made
- req.body.contactId = id;
- req.body.adminEmail=req.userEmail;
- let ToBeReplied = contact.userEmail;
-
-contact.reply=req.body;
-contact.dateReplied = new Date();
-await contact.save();
-if(!req.body.reply||req.body.reply==" "){
-   return res
-     .status(404)
-     .json({
-       message: `you can not send empt reply`
-     });
-}
-let reply=await relpyconst.create(req.body);
-
-const renderedTemplate = ejs.render(replymessage, { reply: contact.reply });
-console.log("tobereplied",ToBeReplied)
- await sendEmail(ToBeReplied, "your response from holiday planner", "thank yoou for contacting us!", replymessage,req.userEmail);
- return res.status(202).json({ message: `reply made successfully`,
- reply:reply});
-
-}
+export const replyfunction=async (req,res,next)=>
+{
+    var id = req.params.id;
+      const  contact=await contactconst.findById(id);
+       if (!contact) {
+         return res
+           .status(404)
+           .json({
+             message: `No document with ID: ${id} found in  contacts  collection. please try to use  a valid contact id `
+           });
+           //auto consuming id of contact on which the
+       }  
+     //auto consuming id of contact on which the contact was made
+     req.body.contactId = id;
+     req.body.adminEmail=req.userEmail;
+     let ToBeReplied = contact.userEmail;
+    
+    contact.reply=req.body;
+    contact.dateReplied = new Date();
+    await contact.save();
+    if(!req.body.reply||req.body.reply==" "){
+       return res
+         .status(404)
+         .json({
+           message: `you can not send empt reply`
+         });
+    }
+    let reply=await relpyconst.create(req.body);
+    
+    const renderedTemplate = ejs.render(replymessage, { reply: contact.reply });
+   // console.log("tobereplied",ToBeReplied)
+     await sendEmail(ToBeReplied, " holiday planners response  to you", "thank yoou for contacting us!", replymessage,req.userEmail);
+     return res.status(202).json({ message: `reply made successfully`,
+     reply:reply});
+    next()
+  }
+  catchAsync(replyfunction);

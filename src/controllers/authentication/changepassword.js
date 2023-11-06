@@ -1,7 +1,8 @@
 import { userconst } from "../../models/index.js";
 import { passComparer,passHashing } from "../../utils/index.js";
+import { catchAsync } from "../../middleware/err.js";
 export const changepassword=async (req,res,next)=>{
-try{
+// try{
     const { currentpassword, newpassword } = req.body;
 const { userId,userEmail } = req;
 const user=await userconst.findById(userId)
@@ -23,8 +24,9 @@ if (!isPasswordCorrect) {
         res.status(200).json({message:"password changed successfuly"})
         
 
-}catch(err){
-    console.log("catch:",err.message,err.name)
-}
+// }catch(err){
+//     console.log("catch:",err.message,err.name)
+// }
 
 }
+catchAsync(changepassword)
