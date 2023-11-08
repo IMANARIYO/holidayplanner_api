@@ -4,7 +4,8 @@ import {
   testmonyconst,
   bookingconst,
   userconst,
-  relpyconst
+  relpyconst,
+  formattedDate
 } from "../../models";
 import ejs from"ejs"
 import findContact from"./findbyid.js"
@@ -21,6 +22,15 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET
 });
+
+
+
+
+
+
+
+
+
 
 const insertOneDynamic = model =>
  { 
@@ -65,7 +75,8 @@ const insertOneDynamic = model =>
             {imagesArray.push((await cloudinary.uploader.upload(req.files.gallery[index].path)) .secure_url); }
            newObject.gallery = imagesArray;
         }
-
+     if(req.body.message){req.body.dateSent = formattedDate;
+       console.log(formattedDate)}
       let data = await model.create(newObject);
       //checking if the request is contact as it has the message field
       if(req.body.message)
@@ -105,15 +116,20 @@ export const replyfunction=async (req,res,next)=>
              message: `No document with ID: ${id} found in  contacts  collection. please try to use  a valid contact id `
            });
            //auto consuming id of contact on which the
-       }  
-     //auto consuming id of contact on which the contact was made
+       }
+       
+
+     
+  //auto consuming id of contact on which the contact was made
      req.body.contactId = id;
      req.body.adminEmail=req.userEmail;
      let ToBeReplied = contact.userEmail;
     
     contact.reply=req.body;
-    contact.dateReplied = new Date();
+    contact.dateReplied = formattedDate;
+    console.log("dateReplied", contact.dateReplied);
     await contact.save();
+    console.log(contact)
     if(!req.body.reply||req.body.reply==" "){
        return res
          .status(404)

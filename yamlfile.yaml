@@ -259,14 +259,8 @@ components:
        reply:
          type: string
          example: "This is a sample reply from admin"
-       dateSent:
-         type: string
-         format: date-time
-         example: "2021-09-30T12:34:56Z"
-       dateReplied:
-         type: string
-         format: date-time
-         example: "2021-10-01T10:10:10Z"
+      
+       
     ContactUpdate:
       type: object
       properties:
