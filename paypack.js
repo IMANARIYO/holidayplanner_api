@@ -13,14 +13,16 @@ console.log("some secret.............",paypack.client_id)
 paypack
   .cashin({
     number: "0787795163",
-    amount: 100,
+    amount: 1000,
+
     environment: "development/production"
   })
   .then(res => { 
-    console.log(res.data);
+    console.log("information")
+    console.log("data",res.data);
   })
   .catch(err => {
-    console.log(err);
+    console.log("error in cashin -----------------------------------------------------------------------------",err);
   });
   // paypack
   //   .cashout({
@@ -56,7 +58,7 @@ paypack
     console.log(res.data);
   })
   .catch(err => {
-    console.log(err);
+    console.log(err,"================================================================================");
   });
 
 
