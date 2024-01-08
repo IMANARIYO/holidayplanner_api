@@ -1,5 +1,4 @@
 import  jwt from "jsonwebtoken";
-import { userconst } from "../models";
 export const  verifyingtoken=(req,res,next)=>
 {
 

@@ -4,12 +4,12 @@ info:
   version: "1.0.0"
   description: API documentation for holiday planning 
   contact:
-    name: imanariyo baptiste
-    email: "imanariyobaptiste@gmail.com"
+    name: imanariyo baptiste  0787795163 
+    email: "telphone number"
     url: "tel:0787795163"
   description: "Phone: 0787795163"
 servers:
-  - url:  http://localhost:8800
+  - url:  https://holidayplanner.onrender.com
 components:
   securitySchemes:
     bearerAuth:
@@ -1308,8 +1308,7 @@ paths:
         404:
           description: No bookings found for the given user ID
         500:
-          description: Server error
-
+          description: Server error 
   /book/update/{id}:
     patch:
       summary: Update a booking
@@ -1436,7 +1435,7 @@ paths:
                   $ref: '#/components/schemas/Contact'
         500:
           description: Server error
-
+          
   /contact/delete/{id}:
     delete:
       summary: Delete a specific contact by its ID
@@ -1588,6 +1587,5 @@ paths:
           description: No contacts found for the given User ID
         500:
           description: Server error        
-
   
   

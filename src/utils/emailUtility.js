@@ -1,18 +1,14 @@
 import nodemailer from "nodemailer";
 import { isAdmin } from "../middleware";
-export const sendEmail = async (to, subject, textContent, htmlContent,req,adminEmail) => {
+export const sendEmail = async (to,subject,textContent, htmlContent,req,adminEmail) => {
   try {
-  
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-         
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       }
     });
-  
-
     let mailOptions = {
       from: process.env.EMAIL_USER,
       to: to,
@@ -28,9 +24,7 @@ export const sendEmail = async (to, subject, textContent, htmlContent,req,adminE
       text: textContent,
       html: htmlContent 
     };
-
 }
-
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.error("Failed to send email:", error);

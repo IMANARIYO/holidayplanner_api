@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import mongoose from "mongoose";
 export const passHashing = async password => {
   const saltRounds = await bcrypt.genSalt(parseInt(process.env.saltRounds));
   let hashedPassword = await bcrypt.hash(password, saltRounds);

@@ -26,11 +26,11 @@ const deleteOneDynamic = model => {
   
   };
 };
-export const deleteUser =     catchAsync(deleteOneDynamic(userconst));
-export const deleteTour =     catchAsync(deleteOneDynamic(tourconst));
-export const deleteContact =  catchAsync(deleteOneDynamic(contactconst));
+export const deleteUser =catchAsync(deleteOneDynamic(userconst));
+export const deleteTour =catchAsync(deleteOneDynamic(tourconst));
+export const deleteContact =catchAsync(deleteOneDynamic(contactconst));
 export const deleteTestimony =catchAsync(deleteOneDynamic(testmonyconst));
-export const deleteBooking =  catchAsync(deleteOneDynamic(bookingconst));
+export const deleteBooking =catchAsync(deleteOneDynamic(bookingconst));
 
 
 

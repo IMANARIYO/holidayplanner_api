@@ -1,30 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Motel Service Request System (MSRS)</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid Example</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+    mermaid.initialize({ startOnLoad: true });
+  </script>
 </head>
 <body>
-    <header>
-        <h1>Welcome to the MSRS</h1>
-    </header>
-    <section class="user-login">
-        <h2>User Login</h2>
-        <form action="login.php" method="post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">Login</button>
-        </form>
-    </section>
-    <section class="guest-interface">
-        <h2>Guest Interface</h2>
-        <!-- Add guest interface content here -->
-    </section>
-    <section class="staff-dashboard">
-        <h2>Staff Dashboard</h2>
-        <!-- Add staff dashboard content here -->
-    </section>
+  <div class="mermaid">
+    usecase Guest as "Guest" {
+      + View Menu
+      + Register/Log In
+      + Place Order
+      + Pay for Order
+      + Rate Service
+      + Track Order Status
+      + View Order History
+    }
+
+    usecase Staff as "Staff" {
+      + Receive Order Notifications
+      + Update Order Status
+      + Manage Inventory
+      + Handle Order Issues
+    }
+
+    usecase System as "System" {
+      + Generate Invoice
+      + Validate Order
+      + Confirm Payment
+    }
+
+    Guest -->|Initiates| "View Menu"
+    Guest -->|Initiates| "Register/Log In"
+    Guest -->|Initiates| "Place Order"
+    Guest -->|Initiates| "Pay for Order"
+    Guest -->|Initiates| "Rate Service"
+    Guest -->|Initiates| "Track Order Status"
+    Guest -->|Initiates| "View Order History"
+
+    Staff -->|Processes| "Receive Order Notifications"
+    Staff -->|Processes| "Update Order Status"
+    Staff -->|Processes| "Manage Inventory"
+    Staff -->|Processes| "Handle Order Issues"
+
+    System -->|Performs| "Generate Invoice"
+    System -->|Performs| "Validate Order"
+    System -->|Performs| "Confirm Payment"
+  </div>
 </body>
 </html>

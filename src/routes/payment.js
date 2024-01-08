@@ -9,9 +9,10 @@ import {
   findTestimoniesByUserId,
   updateManyTestimonies
 } from "../controllers/trip";
-import { cashing } from "../controllers/trip/index.js";
+import { cashingin,cashingout } from "../controllers/trip/index.js";
 import { verifyingtoken } from "../middleware";
 
 const payRouter = express.Router();
-payRouter.get("",cashing)
+payRouter.post("/cashout",cashingout)
+payRouter.post("/cashin",cashingin)
 export default payRouter

@@ -23,15 +23,6 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 });
 
-
-
-
-
-
-
-
-
-
 const insertOneDynamic = model =>
  { 
 

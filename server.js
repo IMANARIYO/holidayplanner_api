@@ -17,6 +17,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/", mainRouter);
+app.get("/", (req, res) => {
+  res.json({ message: 'Welcome to Holiday Planners' });
+});
 app.all('*',badroutes)
 app.use(errosingeneral);
 
